@@ -1,12 +1,19 @@
 import sys
 import time
 import telepot
+from time import sleep
 '''
 from gpiozero import LED
 '''
-from time import sleep
-chat_id = ''
-bot = telepot.Bot('')
+
+
+filename = ('telegramID.txt')
+with open(filename) as f:
+    IDS = f.read().splitlines()
+
+chat_id = str(IDS[0])
+bot = telepot.Bot(str(IDS[1]))
+
 
 # LED
 def talk():
