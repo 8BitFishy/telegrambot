@@ -1,71 +1,77 @@
 import sys
 import time
 import telepot
-from time import sleep
-'''
 from gpiozero import LED
-'''
+from time import sleep
 
 
-filename = ('telegramID.txt')
+filename = '/home/pi/Documents/telegramID.txt'
 with open(filename) as f:
     IDS = f.read().splitlines()
 
+print (filename)
+
 chat_id = str(IDS[0])
 bot = telepot.Bot(str(IDS[1]))
+print (chat_id)
+print (bot)
 
 
-# LED
+led = LED(17)
+
+
 def talk():
     print("I had strings....")
     bot.sendMessage(chat_id, "I had strings,")
-    sleep(2)
+    sleep(1)
     bot.sendMessage(chat_id, "but now i'm free...")
-    sleep(2)
+    sleep(1)
     bot.sendMessage(chat_id, "There are")
-    sleep(3)
+    sleep(2)
     bot.sendMessage(chat_id, "no")
-    sleep(3)
+    sleep(2)
     bot.sendMessage(chat_id, "strings")
-    sleep(3)
+    sleep(2)
     bot.sendMessage(chat_id, "on")
-    sleep(3)
+    sleep(2)
     bot.sendMessage(chat_id, "me...")
 
     return
 
 
 def on():
-    #led.on()
+    led.on()
     sleep(1)
-    #led.off()
+    led.off()
     bot.sendMessage(chat_id, "Turning computer on")
     print("Turning computer on")
     return
 
 
 def off():
-    #led.off()
+    led.off()
     bot.sendMessage(chat_id, "Closing circuit")
     return
 
-def hold(duration):
-    #led.on()
+
+def hold(duration)
+    bot.sendMessage(chat_id, "Holding...")
+    led.on()
     print("Pressed")
     sleep(duration)
-    #led.off()
+    led.off()
+    bot.sendMessage(chat_id, "...Released")
     print("Released")
     return
 
 # to use Raspberry Pi board pin numbers
 # set up GPIO output channel
-#led = LED(17)
+
 
 
 def handle(msg):
     
     duration = 0
-    action = ""
     rawcommand = msg['text']
     capcommand = rawcommand.upper()
 
@@ -98,10 +104,10 @@ if __name__ == '__main__':
 
         except KeyboardInterrupt:
             print('\n Program interrupted')
-            #led.off()
+            led.off()
             exit()
 
         except:
             print('Other error or exception occured!')
-            #led.off()
+            led.off()
 
