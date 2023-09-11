@@ -2,7 +2,7 @@ import json
 import requests
 import urllib
 
-filename = 'apis/telegramID.txt'
+filename = 'telegramID.txt'
 
 with open(filename) as f:
     IDS = f.read().splitlines()
@@ -57,16 +57,19 @@ class Message_Receiver:
         print("Entering get response")
         updates = self.get_updates(self.last_update_id)
         print(f"Update ID = {self.last_update_id}")
+        print(updates)
         if len(updates["result"]) > 0:
             print("Update found")
             self.last_update_id = self.get_last_update_id(updates) + 1
-            print(f"Update ID = {self.last_update_id}")
+            print("Update ID = {}".format(self.last_update_id))
+
             self.text = updates["result"][0]["message"]["text"]
-            print(f'Received update - {updates["result"][0]["message"]["text"]}')
+            print("Received update = {}".format(updates["result"][0]["message"]["text"]))
+
         else:
             self.text = ''
         self.text = self.text.lower()
-        print(f"Leaving get response with text: {self.text}")
+        print("Leaving get response with text: {}".format(self.text))
         #todo cancel/exit/quit/stop
         return self.text
     

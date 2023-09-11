@@ -1,18 +1,21 @@
 import Telegram_Manager
 from time import sleep
-from gpiozero import LED
+#from gpiozero import LED
 from time import sleep
 
-filename = '/home/pi/Documents/telegramID.txt'
+'''
+#filename = '/home/pi/Documents/telegramID.txt'
+filename = 'telegramID.txt'
+
 with open(filename) as f:
     IDS = f.read().splitlines()
 
 print(filename)
 
-chat_id = str(IDS[0])
-TOKEN = str(IDS[1])
+#chat_id = str(IDS[0])
+TOKEN = str(IDS[0])
 URL = "https://api.telegram.org/bot{}/".format(TOKEN)
-
+'''
 
 led = LED(17)
 
@@ -46,27 +49,42 @@ def hold(duration, Octavius_Receiver):
 def handle(msg, Octavius_Receiver):
     duration = 0
     print(msg)
-    rawcommand = msg['text']
-    capcommand = rawcommand.upper()
+    #rawcommand = msg['text']
+    capcommand = msg.upper()
 
     command = capcommand.split()
     action = command[0]
 
     print('Got command: %s' % command)
-    print("{}, {}".format(action, duration))
+    print("{}".format(action), end="")
 
     if action == 'ON':
-        Octavius_Receiver.send_message("Turning computer on")
-        on()
+        print()
+        try:
+            on()
+            Octavius_Receiver.send_message("Turning computer on")
+        except NameError:
+            Octavius_Receiver.send_message("LED package not recognised, are you sure this is a pi?")
+
     elif action == 'OFF':
-        Octavius_Receiver.send_message("Turning computer off")
-        off()
+        print()
+        try:
+            off()
+            Octavius_Receiver.send_message("Turning computer off")
+        except NameError:
+            Octavius_Receiver.send_message("LED package not recognised, are you sure this is a pi?")
+
     elif action == 'TALK':
+        print()
         Octavius_Receiver.send_message("Hello, what can I do for you?")
 
     elif action == "HOLD":
-        duration = int(command[1])
-        hold(duration, Octavius_Receiver)
+        try:
+            duration = int(command[1])
+            print(" {}".format(duration))
+            hold(duration, Octavius_Receiver)
+        except NameError:
+            Octavius_Receiver.send_message("LED package not recognised, are you sure this is a pi?")
 
 def receiver_loop(Octavius_Receiver):
     while True:
